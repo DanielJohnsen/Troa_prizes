@@ -123,28 +123,61 @@ namespace TroaPrices
                     if (int.TryParse(ThreeOne.Text, out value) && int.TryParse(ThreeDraw.Text, out value2) &&
                         value + value2 != 0)
                     {
-                        ThreeOneTB.Maximum = int.Parse(TotalPrizes.Text)/
-                                             (int.Parse(ThreeOne.Text) + int.Parse(ThreeDraw.Text));
+                        ThreeOneTB.Maximum = (int.Parse(TotalPrizes.Text)/
+                                             (int.Parse(ThreeOne.Text) + int.Parse(ThreeDraw.Text)))+1; //random + 1 undgår afrundingsfejl
                         if (int.Parse(ThreeDraw.Text) != 0)
                             ThreeDrawTB.Maximum = ThreeOneTB.Maximum;
                         if (int.Parse(ThreeDraw.Text) == 0)
+                        {
+                            ThreeDrawTB.Value = 0;
                             ThreeDrawTB.Maximum = 1;
+                        }
                         if (int.Parse(ThreeOne.Text) == 0)
+                        {
+                            ThreeOneTB.Value = 0;
                             ThreeOneTB.Maximum = 1;
+                        }
+                        if(int.Parse(ThreeOne.Text)!=0 || int.Parse(ThreeDraw.Text)!=0)
+                        {
+                            ThreeOneTB.Value = 0;
+                            ThreeDrawTB.Value = 0;//undgår fejl hvor value er højer end max
+                            ThreeOneTB.Value = int.Parse(ThreeOnePrizes.Text);
+                            ThreeDrawTB.Value = int.Parse(ThreeDrawPrizes.Text);
+                        }
+                          
+                    }
+                    else
+                    {
+                        ThreeOneTB.Value = 0;
+                        ThreeDrawTB.Value = 0;
+                        ThreeOneTB.Maximum = 1;
+                        ThreeDrawTB.Maximum = 1;
                     }
 
                     //3-1 er tom
                     if (!int.TryParse(ThreeOne.Text, out value) && int.TryParse(ThreeDraw.Text, out value))
                     {
+                        //hvis 3-1 er tom og 3-0-1 har 0
                         if (value == 0)
                         {
+                            ThreeOneTB.Value = 0;
+                            ThreeDrawTB.Value = 0;
                             ThreeOneTB.Maximum = 1;
                             ThreeDrawTB.Maximum = 1;
                         }
-                        else
+                        else //3-1 er tom og 3-0-1 er >0
                         {
+                            
+                            ThreeOneTB.Value = 0;
                             ThreeOneTB.Maximum = 1;
-                            ThreeDrawTB.Maximum = totalprizes/value;
+
+                            ThreeDrawTB.Value = 0; //undgår en fejl hvor Max var lavere end value
+
+                            ThreeDrawTB.Maximum = totalprizes / value;
+                            ThreeDrawTB.Value = int.Parse(ThreeDrawPrizes.Text);
+
+                            
+                            
                         }
 
                     }
@@ -152,35 +185,50 @@ namespace TroaPrices
                     //3-0-1 er tom
                     if (!int.TryParse(ThreeDraw.Text, out value) && int.TryParse(ThreeOne.Text, out value))
                     {
-                        if (value == 0)
+                        if (value == 0) //3-0-1 er tom og 3-1 er 0
                         {
+                            ThreeOneTB.Value = 0;
+                            ThreeDrawTB.Value = 0;
                             ThreeOneTB.Maximum = 1;
                             ThreeDrawTB.Maximum = 1;
                         }
-                        else
+                        else //3-0-1 er tom og 3-0 er >0
                         {
+                            ThreeDrawTB.Value = 0;
                             ThreeDrawTB.Maximum = 1;
-                            ThreeOneTB.Maximum = totalprizes/value;
+
+                            ThreeOneTB.Value = 0;
+
+                            ThreeOneTB.Maximum = totalprizes / value;
+                            ThreeOneTB.Value = int.Parse(ThreeOnePrizes.Text);
                         }
                     }
                     //Begge er tomme
-                    if (!int.TryParse(ThreeDraw.Text, out value) && !int.TryParse(ThreeOne.Text, out value))
+                    if (!int.TryParse(ThreeOne.Text, out value) && !int.TryParse(ThreeDraw.Text, out value2))
                     {
+                        ThreeOneTB.Value = 0;
+                        ThreeDrawTB.Value = 0;
                         ThreeOneTB.Maximum = 1;
                         ThreeDrawTB.Maximum = 1;
                     }
-                    if (!int.TryParse(ThreeOne.Text, out value) || ThreeOne.Text == "0")
-                        ThreeOneTB.Value = 0;
-                    else ThreeOneTB.Value = int.Parse(ThreeOnePrizes.Text);
+                    //if (!int.TryParse(ThreeOne.Text, out value) || ThreeOne.Text == "0")
+                    //    ThreeOneTB.Value = 0;
+                    //else ThreeOneTB.Value = int.Parse(ThreeOnePrizes.Text);
+                    //
+                    //if (!int.TryParse(ThreeDraw.Text, out value) || ThreeDraw.Text == "0")
+                    //ThreeDrawTB.Value = 0;
+                    //else ThreeDrawTB.Value = int.Parse(ThreeOnePrizes.Text);
+                    //if (!int.TryParse(ThreeDraw.Text, out value) && !int.TryParse(ThreeOne.Text, out value))
+                    //{
+                    //ThreeOneTB.Maximum = 1;
+                    //ThreeDrawTB.Maximum = 1;
+                    //}
 
-                    if (!int.TryParse(ThreeDraw.Text, out value) || ThreeDraw.Text == "0")
-                        ThreeDrawTB.Value = 0;
-                    else ThreeDrawTB.Value = int.Parse(ThreeOnePrizes.Text);
 
 
 
 
-
+                    //4-0
                     if (int.TryParse(FourNil.Text, out value) && 0 != Int32.Parse(FourNil.Text))
                     {
                         //Trackbars maximum sættes
@@ -190,14 +238,16 @@ namespace TroaPrices
                     }
                     else
                     {
-                        FourNilTB.Maximum = 1;
                         FourNilTB.Value = 0;
+                        FourNilTB.Maximum = 1;
+                        
                     }
                 }
             }
             catch (System.ArgumentOutOfRangeException e)
             {
-                MessageBox.Show("One of the trackbars value is higher than it's possible maximum. Something here doesen't add up.", "Error",
+                
+                MessageBox.Show("LUL", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -311,7 +361,7 @@ namespace TroaPrices
         {
             int value = 0;
             int count = 0;
-            if(int.TryParse(ThreeDraw.Text, out value));
+            if(int.TryParse(ThreeDraw.Text, out value))
                 count = value + count;
             if(int.TryParse(ThreeOne.Text, out value))
                 count = value + count;
